@@ -35,6 +35,7 @@ function GameLoop:addPet(pet)
     table.insert(self.pets, pet)
 end
 
+-- Create walls around the play area
 function GameLoop:buildWalls(r,g,b)
     table.insert(self.walls,Wall(0,0,10,love.graphics.getHeight(),r,g,b)) --left wall
     table.insert(self.walls,Wall(love.graphics.getWidth()-10,0,10,love.graphics.getHeight(),r,g,b)) --right wall
@@ -53,12 +54,14 @@ function GameLoop:removePet(pet)
     return false
 end
 
+-- Feed all active pets by satiation amount
 function GameLoop:feedPets(s)
     for _,pet in ipairs(self.pets) do
         pet:feed(s)
     end
 end
 
+-- Create UI buttons
 function GameLoop:buildUI()
     table.insert(self.ui,
     Button(50,
@@ -99,6 +102,7 @@ function GameLoop:keyreleased(key)
     end
 end
 
+-- Handle mouse clicks on UI elements
 function GameLoop:mousepressed(x,y,mkey)
     for _,elem in ipairs(self.ui) do
         if mkey == 1 then
@@ -107,6 +111,7 @@ function GameLoop:mousepressed(x,y,mkey)
     end
 end
 
+-- Update UI hover states on mouse movement
 function GameLoop:mousemoved(x,y)
     for _,elem in ipairs(self.ui) do
         elem:handleHover(x,y)
@@ -145,6 +150,7 @@ function GameLoop:draw()
     if bDebug then
         love.graphics.printf("Debug | v1", love.graphics.getWidth() - 60, 10, 50,"right")
         love.graphics.printf("J = -Hunger -Damage | K = +Hunger +Damage", love.graphics.getWidth() - 156, 35, 145,"right")
+        love.graphics.printf("Hunger/Damage Rate:\n" .. self.pets[1].hungerMulti,love.graphics.getWidth() -160,75,150,"right")
     end
 end
 
