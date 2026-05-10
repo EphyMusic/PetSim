@@ -3,6 +3,7 @@ local Object = require 'libs.classic.classic'
 ---@class Button
 local Button = Object:extend()
 
+-- Create a clickable button with text and callback function
 function Button:new(x,y,w,h,text,func)
     self.x = x
     self.y = y
@@ -11,10 +12,11 @@ function Button:new(x,y,w,h,text,func)
     self.text = text
     self.action = func
     self.hovered = false
-    self.colorIn = {love.math.colorFromBytes(50,50,50)}
-    self.colorOut = {love.math.colorFromBytes(200,200,200)}
+    self.colorIn = {love.math.colorFromBytes(50,50,50)}      -- Unhovered fill color
+    self.colorOut = {love.math.colorFromBytes(200,200,200)}  -- Hovered fill color
 end
 
+-- Check if click is inside button bounds, return action or empty function
 function Button:handleClick(clickX,clickY)
     local function nothing() end
     if clickX >= self.x and
@@ -27,6 +29,7 @@ function Button:handleClick(clickX,clickY)
     end
 end
 
+-- Update hover state based on mouse position
 function Button:handleHover(mouseX,mouseY)
     if mouseX >= self.x and
     mouseY >= self.y and
@@ -40,7 +43,7 @@ end
 
 function Button:draw()
     love.graphics.push()
-        --Infill
+        -- Fill (swap colors when hovered)
         if not self.hovered then
             love.graphics.setColor(unpack(self.colorIn))
         else
@@ -48,7 +51,7 @@ function Button:draw()
         end
         love.graphics.rectangle("fill",self.x,self.y,self.width,self.height)
 
-        --Outline
+        -- Outline (swap colors when hovered)
         if not self.hovered then
             love.graphics.setColor(unpack(self.colorOut))
         else
@@ -56,7 +59,7 @@ function Button:draw()
         end
         love.graphics.rectangle("line",self.x,self.y,self.width,self.height)
 
-        --Text
+        -- Text (centered vertically and horizontally)
         love.graphics.setColor(1,1,1)
         local font = love.graphics.getFont()
         local fontHeight = font and font:getHeight() or 0
