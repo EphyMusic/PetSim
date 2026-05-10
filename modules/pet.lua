@@ -30,7 +30,7 @@ function Pet:new()
     self.damageTick = self.timer:every(1, function()  -- Damage check every 1s
         self:takeDamage()
     end)
-    self.color = {love.math.colorFromBytes(love.math.random(0,255), love.math.random(0,255), love.math.random(0,255))}
+    self.color = {love.math.colorFromBytes(love.math.random(0,255), love.math.random(0,255), love.math.random(0,255))}  -- Random color
 end
 
 -- Random hunger rate between min and max
