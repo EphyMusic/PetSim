@@ -82,8 +82,8 @@ function GameLoop:keyreleased(key)
     
     local pet = self.pets[1]  -- For now, control the first pet
     if pet and not pet.dead then
-        if key == "f" then pet:feed(1)
-        elseif key == "j" then
+        --if key == "f" then pet:feed(1)
+        if key == "j"  and bDebug then
             pet.hungerMulti = math.max(0, (pet.hungerMulti or 0) - 1)
             pet.damageMulti = math.max(0, (pet.damageMulti or 0) - 1)
         elseif key == "k" then
@@ -140,6 +140,11 @@ function GameLoop:draw()
         )
     elseif pet and pet.dead then
         love.graphics.print('Your pet has died.\nPress "n" to hatch a new pet.',love.graphics.getWidth()/2,love.graphics.getHeight()/2)
+    end
+
+    if bDebug then
+        love.graphics.printf("Debug | v1", love.graphics.getWidth() - 60, 10, 50,"right")
+        love.graphics.printf("J = -Hunger -Damage | K = +Hunger +Damage", love.graphics.getWidth() - 156, 35, 145,"right")
     end
 end
 
