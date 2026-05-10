@@ -1,5 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
---Tamagotchi-like
+-- Tamagotchi-like pet simulator
 Pet = require 'modules.pet'
 GS = require 'libs.hump.gamestate'
 GameLoop = require 'states.gameloop'
