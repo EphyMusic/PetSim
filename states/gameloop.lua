@@ -53,8 +53,21 @@ function GameLoop:removePet(pet)
     return false
 end
 
+function GameLoop:feedPets(s)
+    for _,pet in ipairs(self.pets) do
+        pet:feed(s)
+    end
+end
+
 function GameLoop:buildUI()
-    feed = Button() --start here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    table.insert(self.ui,
+    Button(50,
+    love.graphics.getHeight()/2 + 10,60,30,
+    "Feed",
+    function()
+        self:feedPets(1)
+    end)
+    )
 end
 
 function GameLoop:update(dt)
@@ -86,19 +99,39 @@ function GameLoop:keyreleased(key)
     end
 end
 
-function GameLoop:mousepressed(key)
-    
+function GameLoop:mousepressed(x,y,mkey)
+    for _,elem in ipairs(self.ui) do
+        if mkey == 1 then
+            elem:handleClick(x,y)()
+        end
+    end
+end
+
+function GameLoop:mousemoved(x,y)
+    for _,elem in ipairs(self.ui) do
+        elem:handleHover(x,y)
+    end
 end
 
 function GameLoop:draw()
     -- Draw all pets
     for _, pet in ipairs(self.pets) do
-        pet:draw()
+        if not pet.dead then
+            pet:draw()
+        end
     end
     
     -- Display stats for first pet
     local pet = self.pets[1]
     if pet and not pet.dead then
+        for _,wall in ipairs(self.walls) do
+            wall:draw()
+        end
+
+        for _,elem in ipairs(self.ui) do
+            elem:draw()
+        end
+
         love.graphics.print("HP: " .. fmt2(pet.hp), 10, 10)
         love.graphics.print(
             "Hunger: " .. fmt2(pet.hunger) .. "/" .. fmt2(pet.hungerMax),
@@ -107,10 +140,6 @@ function GameLoop:draw()
         )
     elseif pet and pet.dead then
         love.graphics.print('Your pet has died.\nPress "n" to hatch a new pet.',love.graphics.getWidth()/2,love.graphics.getHeight()/2)
-    end
-
-    for _,wall in ipairs(self.walls) do
-        wall:draw()
     end
 end
 
