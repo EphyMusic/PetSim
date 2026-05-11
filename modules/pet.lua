@@ -19,6 +19,17 @@ function Pet:new()
     self.hungerMax = 10
     self.x = 250
     self.y = 200
+    self.width = 25
+    self.height = 50
+    self.velocityX = 0
+    self.targetX = nil
+    self.maxSpeed = 100
+    self.speedMulti = 1
+    self.moveState = "idle"
+    self.moveBounds = {
+        left = 10,
+        right = love.graphics.getWidth() - 10,
+    }
     self.timer = Timer.new()
     self.hungerRate = round2(0.7)
     self.hungerMulti = 1
@@ -31,6 +42,7 @@ function Pet:new()
         self:takeDamage()
     end)
     self.color = {love.math.colorFromBytes(love.math.random(0,255), love.math.random(0,255), love.math.random(0,255))}  -- Random color
+    self:scheduleNextMove()
 end
 
 -- Random hunger rate between min and max
@@ -56,6 +68,13 @@ function Pet:starve()
     end
 end
 
+-- Current speed scales with HP and hunger
+function Pet:getMaxSpeed()
+    local hpFactor = math.max(0, math.min(1, self.hp / 100))
+    local hungerFactor = math.max(0.75, 1 - 0.25 * (self.hunger / self.hungerMax))
+    return self.maxSpeed * self.speedMulti * hpFactor * hungerFactor
+end
+
 -- Damage when hungry, heal when fed
 function Pet:takeDamage()
     if self.hunger >= self.hungerMax then  -- Starving: take damage
@@ -66,9 +85,66 @@ function Pet:takeDamage()
     end
 end
 
+-- Pause, then pick a new horizontal destination
+function Pet:scheduleNextMove()
+    if self.dead then return end
+
+    self.moveState = "idle"
+    self.velocityX = 0
+    self.targetX = nil
+
+    local idleTime = love.math.random(0.5,2.5)
+    self.timer:after(idleTime, function()
+        if self.dead then return end
+        self:startRandomMove()
+    end)
+end
+
+-- Choose a non-trivial destination inside the movement bounds
+function Pet:startRandomMove()
+    local minX = self.moveBounds.left
+    local maxX = self.moveBounds.right - self.width
+    local minDistance = 25
+    local targetX = self.x
+    local attempts = 0
+
+    while math.abs(targetX - self.x) < minDistance and attempts < 10 do
+        targetX = love.math.random(minX, maxX)
+        attempts = attempts + 1
+    end
+
+    if math.abs(targetX - self.x) < minDistance then
+        self:scheduleNextMove()
+        return
+    end
+
+    self.targetX = targetX
+    self.moveState = "moving"
+end
+
 function Pet:update(dt)
     if self.dead then return end
     self.timer:update(dt)
+
+    if self.moveState == "moving" and self.targetX then
+        local direction = 0
+        if self.targetX > self.x then
+            direction = 1
+        elseif self.targetX < self.x then
+            direction = -1
+        end
+
+        self.velocityX = direction * self:getMaxSpeed()
+        self.x = self.x + self.velocityX * dt
+
+        if direction > 0 and self.x >= self.targetX then
+            self.x = self.targetX
+            self:scheduleNextMove()
+        elseif direction < 0 and self.x <= self.targetX then
+            self.x = self.targetX
+            self:scheduleNextMove()
+        end
+    end
 end
 
 function Pet:die()
@@ -79,7 +155,7 @@ end
 function Pet:draw(x,y)
     love.graphics.push()
         love.graphics.setColor(unpack(self.color))
-        love.graphics.rectangle("fill", self.x, self.y, 50, 50)
+        love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     love.graphics.pop()
 end
 
