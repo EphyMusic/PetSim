@@ -60,7 +60,12 @@ function Button:draw()
         love.graphics.rectangle("line",self.x,self.y,self.width,self.height)
 
         -- Text (centered vertically and horizontally)
-        love.graphics.setColor(1,1,1)
+        if not self.hovered then
+            love.graphics.setColor(1,1,1)
+        else
+            love.graphics.setColor(0,0,0)
+        end
+        
         local font = love.graphics.getFont()
         local fontHeight = font and font:getHeight() or 0
         local textY = self.y + (self.height - fontHeight) / 2
