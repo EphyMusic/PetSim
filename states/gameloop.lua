@@ -76,6 +76,7 @@ end
 function GameLoop:update(dt)
     for _, pet in ipairs(self.pets) do
         pet:update(dt)
+        pet:resolveCollision(self.walls)
     end
 end
 
