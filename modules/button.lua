@@ -70,6 +70,7 @@ function Button:draw()
         local fontHeight = font and font:getHeight() or 0
         local textY = self.y + (self.height - fontHeight) / 2
         love.graphics.printf(self.text, self.x, textY, self.width, "center")
+        love.graphics.setColor(1,1,1)
     love.graphics.pop()
 end
 
