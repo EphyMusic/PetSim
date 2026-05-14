@@ -18,7 +18,9 @@ function Pet:new()
     self.hunger = 0
     self.hungerMax = 10
     self.x = 250
+    self.lastX = self.x
     self.y = 200
+    self.lastY = self.y
     self.width = 25
     self.height = 50
     self.velocityX = 0
@@ -100,6 +102,19 @@ function Pet:scheduleNextMove()
     end)
 end
 
+function Pet:checkCollision(wall)
+    return self.x + self.width > wall.x
+    and self.x < wall.x + wall.width
+    and self.y + self.height > wall.y
+    and self.y < wall.y + wall.height
+end
+
+function Pet:resolveCollision(walls)
+    for _wall in ipairs(walls) do
+        --START HERE
+    end
+end
+
 -- Choose a non-trivial destination inside the movement bounds
 function Pet:startRandomMove()
     local minX = self.moveBounds.left
@@ -123,6 +138,8 @@ function Pet:startRandomMove()
 end
 
 function Pet:update(dt)
+    self.lastX = self.x
+    self.lastY = self.y
     if self.dead then return end
     self.timer:update(dt)
 
