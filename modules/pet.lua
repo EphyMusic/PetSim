@@ -24,6 +24,7 @@ function Pet:new()
     self.width = 25
     self.height = 50
     self.velocityX = 0
+    self.velocityY = 200
     self.targetX = nil
     self.maxSpeed = 100
     self.speedMulti = 1
@@ -110,9 +111,35 @@ function Pet:checkCollision(wall)
 end
 
 function Pet:resolveCollision(walls)
-    for _wall in ipairs(walls) do
-        --START HERE
+    for _,wall in ipairs(walls) do
+        if self:checkCollision(wall) then
+            if self:sideCollision(wall) then
+                if self.x + self.width/2 < wall.x + wall.width/2 then
+                    local pushback = self.x + self.width - wall.x   -- push left
+                    self.x = self.x - pushback
+                else
+                    local pushback = wall.x + wall.width - self.x   -- push right
+                    self.x = self.x + pushback
+                end
+            elseif self:verticalCollision(wall) then
+                if self.y + self.height/2 < wall.y + wall.height/2 then
+                    local pushback = self.y + self.height - wall.y  -- push up
+                    self.y = self.y - pushback
+                else
+                    local pushback = wall.y + wall.height - self.y  -- push down
+                    self.y = self.y + pushback
+                end
+            end
+        end
     end
+end
+
+function Pet:sideCollision(wall)
+    return self.lastY < wall.y + wall.height and self.lastY + self.height > wall.y
+end
+
+function Pet:verticalCollision(wall)
+    return self.lastX < wall.x + wall.width and self.lastX + self.width > wall.x
 end
 
 -- Choose a non-trivial destination inside the movement bounds
@@ -140,6 +167,7 @@ end
 function Pet:update(dt)
     self.lastX = self.x
     self.lastY = self.y
+    self.y = self.y + self.velocityY * dt
     if self.dead then return end
     self.timer:update(dt)
 
