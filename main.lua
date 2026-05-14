@@ -1,4 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
+---@diagnostic disable: lowercase-global
 -- Tamagotchi-like pet simulator
 -- Pet = require 'modules.pet'
 GS = require 'libs.hump.gamestate'
