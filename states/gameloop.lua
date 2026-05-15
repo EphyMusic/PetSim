@@ -22,6 +22,7 @@ end
 
 function GameLoop:enter()
     self.pets = {}  -- Active pets
+    self.currentPet = 1
     self.walls = {}
     self.deadPets = {}
     self:addPet(Pet())  -- Start with one pet
@@ -83,14 +84,14 @@ end
 -- Controls: F=feed, J=easier, K=harder, N=new pet, Q=quit
 function GameLoop:keyreleased(key)
     if key == "q" then love.event.quit() end
-    
-    local pet = self.pets[1]  -- For now, control the first pet
+
+    local pet = self.pets[self.currentPet]  -- pet to control
     if pet and not pet.dead then
-        --if key == "f" then pet:feed(1)
+        if key == "f" and (bDebug or bHandheld) then pet:feed(1) end
         if key == "j"  and bDebug then
             pet.hungerMulti = math.max(0, (pet.hungerMulti or 0) - 1)
             pet.damageMulti = math.max(0, (pet.damageMulti or 0) - 1)
-        elseif key == "k" then
+        elseif key == "k"  and bDebug then
             pet.hungerMulti = math.max(0, (pet.hungerMulti or 0) + 1)
             pet.damageMulti = math.max(0, (pet.damageMulti or 0) + 1)
         end
@@ -135,7 +136,7 @@ function GameLoop:draw()
         end
 
         for _,elem in ipairs(self.ui) do
-            elem:draw()
+            if elem and not elem.disabled then elem:draw() end
         end
 
         love.graphics.print("HP: " .. fmt2(pet.hp), 10, 10)
