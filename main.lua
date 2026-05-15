@@ -4,7 +4,7 @@
 -- Pet = require 'modules.pet'
 GS = require 'libs.hump.gamestate'
 GameLoop = require 'states.gameloop'
-bDebug = true  -- Enable debug mode (J/K keys and debug display)
+bDebug = false  -- Enable debug mode (J/K keys and debug display)
 bHandheld = false
 
 function love.load()
