@@ -14,6 +14,7 @@ function Button:new(x,y,w,h,text,func)
     self.hovered = false
     self.colorIn = {love.math.colorFromBytes(50,50,50)}      -- Infill color
     self.colorOut = {love.math.colorFromBytes(200,200,200)}  -- Outline color
+    self.disabled = bHandheld                                -- Future Proofing for Handheld mode
 end
 
 -- Check if click is inside button bounds, return action or empty function

@@ -5,6 +5,7 @@
 GS = require 'libs.hump.gamestate'
 GameLoop = require 'states.gameloop'
 bDebug = true  -- Enable debug mode (J/K keys and debug display)
+bHandheld = false
 
 function love.load()
     GS.registerEvents()
