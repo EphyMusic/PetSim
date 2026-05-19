@@ -17,6 +17,9 @@ function Pet:new()
     self.hp = 100
     self.hunger = 0
     self.hungerMax = 10
+    self.cheer = 0
+    self.cheerMax = 100
+    self.cheerDrainRate = 0.1
     self.x = 250
     self.lastX = self.x
     self.y = 200
@@ -34,7 +37,7 @@ function Pet:new()
         right = love.graphics.getWidth() - 10,
     }
     self.timer = Timer.new()
-    self.hungerRate = round2(0.7)
+    self.hungerRate = 0.7
     self.hungerMulti = 1
     self.hungerTick = self.timer:every(2, function()  -- Hunger increases every 2s
         self:starve()
@@ -44,12 +47,21 @@ function Pet:new()
     self.damageTick = self.timer:every(1, function()  -- Damage check every 1s
         self:takeDamage()
     end)
+    self.cheerTick = self.timer:every(3, function()
+        self:loseCheer()
+    end)
     self.color = {love.math.colorFromBytes(love.math.random(0,255), love.math.random(0,255), love.math.random(0,255))}  -- Random color
     self:scheduleNextMove()
 end
 
 -- Random hunger rate between min and max
-function Pet:rollRate()
+function Pet:rollHungerRate()
+    local minRate = 0.05
+    local maxRate = 0.3 * (self.hungerMulti or 1)
+    return round2(minRate + (maxRate - minRate) * love.math.random())
+end
+
+function Pet:rollCheerRate()
     local minRate = 0.05
     local maxRate = 0.3 * (self.hungerMulti or 1)
     return round2(minRate + (maxRate - minRate) * love.math.random())
@@ -67,7 +79,14 @@ end
 function Pet:starve()
     if self.hunger < self.hungerMax then
         self.hunger = round2(math.min(self.hungerMax, self.hunger + self.hungerRate))
-        self.hungerRate = self:rollRate()
+        self.hungerRate = self:rollHungerRate()
+    end
+end
+
+function Pet:loseCheer()
+    if self.cheer > 0 then
+        self.cheer = round2(math.max(0, self.cheer - self.cheerDrainRate))
+        self.cheerDrainRate = self:rollCheerRate()
     end
 end
 

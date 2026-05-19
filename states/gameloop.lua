@@ -142,9 +142,9 @@ function GameLoop:draw()
         love.graphics.print("HP: " .. fmt2(pet.hp), 10, 10)
         love.graphics.print(
             "Hunger: " .. fmt2(pet.hunger) .. "/" .. fmt2(pet.hungerMax),
-            10,
-            30
+            10, 30
         )
+        love.graphics.print("Happiness: " .. fmt2(pet.cheer),10,50)
     elseif pet and pet.dead then
         love.graphics.print('Your pet has died.\nPress "n" to hatch a new pet.',love.graphics.getWidth()/2,love.graphics.getHeight()/2)
     end
