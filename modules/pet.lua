@@ -13,6 +13,7 @@ end
 
 -- Initialize pet with default stats
 function Pet:new()
+    self.name = names[love.math.random() * #names]
     self.dead = false
     self.hp = 100
     self.hunger = 0
@@ -222,5 +223,7 @@ function Pet:draw(x,y)
         love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     love.graphics.pop()
 end
+
+local names = {"Bob","George","Penny","Amy","Darla","Conroy","Little Biddy","Unnamed"}
 
 return Pet

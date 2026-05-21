@@ -121,15 +121,15 @@ function GameLoop:mousemoved(x,y)
 end
 
 function GameLoop:draw()
-    -- Draw all pets
-    for _, pet in ipairs(self.pets) do
-        if not pet.dead then
-            pet:draw()
-        end
-    end
-    
-    -- Display stats for first pet
+    -- -- Draw all pets
+    -- for _, pet in ipairs(self.pets) do
+    --     if not pet.dead then
+    --         pet:draw()
+    --     end
+    -- end
+
     local pet = self.pets[1]
+    pet:draw()
     if pet and not pet.dead then
         for _,wall in ipairs(self.walls) do
             wall:draw()
@@ -139,12 +139,13 @@ function GameLoop:draw()
             if elem and not elem.disabled then elem:draw() end
         end
 
-        love.graphics.print("HP: " .. fmt2(pet.hp), 10, 10)
+        love.graphics.print("Name: "..pet.name)
+        love.graphics.print("HP: " .. fmt2(pet.hp), 10, 30)
         love.graphics.print(
             "Hunger: " .. fmt2(pet.hunger) .. "/" .. fmt2(pet.hungerMax),
-            10, 30
+            10, 50
         )
-        love.graphics.print("Happiness: " .. fmt2(pet.cheer),10,50)
+        love.graphics.print("Happiness: " .. fmt2(pet.cheer),10,70)
     elseif pet and pet.dead then
         love.graphics.print('Your pet has died.\nPress "n" to hatch a new pet.',love.graphics.getWidth()/2,love.graphics.getHeight()/2)
     end
