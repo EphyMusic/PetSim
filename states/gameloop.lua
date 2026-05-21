@@ -56,10 +56,9 @@ function GameLoop:removePet(pet)
 end
 
 -- Feed all active pets by satiation amount
-function GameLoop:feedPets(s)
-    for _,pet in ipairs(self.pets) do
-        pet:feed(s)
-    end
+function GameLoop:feedPet(n)
+    local pet = self.pets[self.currentPet]
+    pet.hunger = math.max(pet.hunger - n,0)
 end
 
 -- Create UI buttons
@@ -69,10 +68,12 @@ function GameLoop:buildUI()
     love.graphics.getHeight()/2 + 10,60,30,
     "Feed",
     function()
-        self:feedPets(1)
+        self:feedPet(1)
     end)
     )
-    Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",) --pickup from here
+    table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",function()
+        self:petPet()
+    end)) --pickup from here
 end
 
 function GameLoop:update(dt)
