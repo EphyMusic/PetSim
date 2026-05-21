@@ -84,6 +84,12 @@ function Pet:starve()
     end
 end
 
+function Pet:petPet(n)
+    if self.cheer < self.cheerMax then
+        self.cheer = round2(math.min(self.cheerMax, self.cheer + n)
+    end
+end
+
 function Pet:loseCheer()
     if self.cheer > 0 then
         self.cheer = round2(math.max(0, self.cheer - self.cheerDrainRate))

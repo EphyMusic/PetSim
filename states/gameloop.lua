@@ -72,6 +72,7 @@ function GameLoop:buildUI()
         self:feedPets(1)
     end)
     )
+    Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",) --pickup from here
 end
 
 function GameLoop:update(dt)
