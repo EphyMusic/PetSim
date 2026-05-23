@@ -61,6 +61,11 @@ function GameLoop:feedPet(n)
     pet.hunger = math.max(pet.hunger - n,0)
 end
 
+
+function GameLoop:petPet(n)
+    local pet = self.pets[self.currentPet]
+    pet.cheer = math.min(pet.cheer + n, pet.cheerMax)
+end
 -- Create UI buttons
 function GameLoop:buildUI()
     table.insert(self.ui,
@@ -72,7 +77,7 @@ function GameLoop:buildUI()
     end)
     )
     table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",function()
-        self:petPet()
+        self:petPet(10)
     end)) --pickup from here
 end
 
@@ -141,7 +146,7 @@ function GameLoop:draw()
             if elem and not elem.disabled then elem:draw() end
         end
 
-        love.graphics.print("Name: "..pet.name)
+        love.graphics.print("Name: ".. (pet.name or "N/A"), 10, 10)
         love.graphics.print("HP: " .. fmt2(pet.hp), 10, 30)
         love.graphics.print(
             "Hunger: " .. fmt2(pet.hunger) .. "/" .. fmt2(pet.hungerMax),

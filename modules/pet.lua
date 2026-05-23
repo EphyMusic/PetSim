@@ -11,9 +11,12 @@ local function round2(n)
     return math.ceil(n * 100 - 0.5) / 100
 end
 
+
+
 -- Initialize pet with default stats
 function Pet:new()
-    self.name = names[love.math.random() * #names]
+    self.names = {"Bob","George","Penny","Amy","Darla","Conroy","Little Biddy","Unnamed"}
+    self.name = self.names[love.math.random(#self.names)]
     self.dead = false
     self.hp = 100
     self.hunger = 0
@@ -62,10 +65,16 @@ function Pet:rollHungerRate()
     return round2(minRate + (maxRate - minRate) * love.math.random())
 end
 
-function Pet:rollCheerRate()
-    local minRate = 0.05
-    local maxRate = 0.3 * (self.hungerMulti or 1)
-    return round2(minRate + (maxRate - minRate) * love.math.random())
+function Pet:getCheerRate()
+    local hungerFactor = self.hunger/self.hungerMax
+    local healthFactor = 1 - (self.hp/100)
+
+    local strain =
+        0.45 * hungerFactor +
+        0.35 * healthFactor +
+        0.20 * hungerFactor * healthFactor
+
+    return round2(0.05 + strain * 0.75)
 end
 
 -- Reduce hunger by satiation amount
@@ -86,14 +95,14 @@ end
 
 function Pet:petPet(n)
     if self.cheer < self.cheerMax then
-        self.cheer = round2(math.min(self.cheerMax, self.cheer + n)
+        self.cheer = round2(math.min(self.cheerMax, self.cheer + n))
     end
 end
 
 function Pet:loseCheer()
     if self.cheer > 0 then
         self.cheer = round2(math.max(0, self.cheer - self.cheerDrainRate))
-        self.cheerDrainRate = self:rollCheerRate()
+        self.cheerDrainRate = self:getCheerRate()
     end
 end
 
@@ -229,7 +238,5 @@ function Pet:draw(x,y)
         love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     love.graphics.pop()
 end
-
-local names = {"Bob","George","Penny","Amy","Darla","Conroy","Little Biddy","Unnamed"}
 
 return Pet
