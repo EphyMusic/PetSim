@@ -54,6 +54,10 @@ function Pet:new()
     self.cheerTick = self.timer:every(3, function()
         self:loseCheer()
     end)
+    self.age = 0
+    self.ageTick = self.timer:every(10, function()
+        self:ageUp()
+    end)
     self.color = {love.math.colorFromBytes(love.math.random(0,255), love.math.random(0,255), love.math.random(0,255))}  -- Random color
     self:scheduleNextMove()
 end
@@ -120,6 +124,13 @@ function Pet:takeDamage()
         if self.hp <= 0 then self:die() end
     elseif self.hunger <= 5 then  -- Well fed: regenerate
         self.hp = round2(math.min(100, self.hp + self.damageRate / 3))
+    end
+end
+
+function Pet:ageUp()
+    if not self.dead then
+        self.age = self.age + 1
+        if self.age > 20 then self.dead = true end
     end
 end
 
