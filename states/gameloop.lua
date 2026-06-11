@@ -58,27 +58,26 @@ end
 -- Feed all active pets by satiation amount
 function GameLoop:feedPet(n)
     local pet = self.pets[self.currentPet]
-    pet.hunger = math.max(pet.hunger - n,0)
+    pet:feed(1)
 end
 
 
 function GameLoop:petPet(n)
     local pet = self.pets[self.currentPet]
-    pet.cheer = math.min(pet.cheer + n, pet.cheerMax)
+    pet:petPet(10)
 end
 -- Create UI buttons
 function GameLoop:buildUI()
-    table.insert(self.ui,
-    Button(50,
-    love.graphics.getHeight()/2 + 10,60,30,
-    "Feed",
+    table.insert(self.ui,Button(50,love.graphics.getHeight()/2 + 10,60,30,"Feed",
     function()
         self:feedPet(1)
     end)
     )
-    table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",function()
+    table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",
+    function()
         self:petPet(10)
-    end)) --pickup from here
+    end)
+    )
 end
 
 function GameLoop:update(dt)
@@ -88,13 +87,14 @@ function GameLoop:update(dt)
     end
 end
 
--- Controls: F=feed, J=easier, K=harder, N=new pet, Q=quit
+-- Controls: F=Feed, J=Lower Rates, K=Raise Rates, N=New Pet, Q=Quit
 function GameLoop:keyreleased(key)
     if key == "q" then love.event.quit() end
 
     local pet = self.pets[self.currentPet]  -- pet to control
     if pet and not pet.dead then
         if key == "f" and (bDebug or bHandheld) then pet:feed(1) end
+        if key == "g" and (bDebug or bHandheld) then pet:petPet(10)
         if key == "j"  and bDebug then
             pet.hungerMulti = math.max(0, (pet.hungerMulti or 0) - 1)
             pet.damageMulti = math.max(0, (pet.damageMulti or 0) - 1)
@@ -136,8 +136,8 @@ function GameLoop:draw()
     -- end
 
     local pet = self.pets[1]
-    pet:draw()
     if pet and not pet.dead then
+        pet:draw()
         for _,wall in ipairs(self.walls) do
             wall:draw()
         end
