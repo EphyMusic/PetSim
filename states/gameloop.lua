@@ -94,7 +94,7 @@ function GameLoop:keyreleased(key)
     local pet = self.pets[self.currentPet]  -- pet to control
     if pet and not pet.dead then
         if key == "f" and (bDebug or bHandheld) then pet:feed(1) end
-        if key == "g" and (bDebug or bHandheld) then pet:petPet(10)
+        if key == "g" and (bDebug or bHandheld) then pet:petPet(10) end
         if key == "j"  and bDebug then
             pet.hungerMulti = math.max(0, (pet.hungerMulti or 0) - 1)
             pet.damageMulti = math.max(0, (pet.damageMulti or 0) - 1)
@@ -153,6 +153,7 @@ function GameLoop:draw()
             10, 50
         )
         love.graphics.print("Happiness: " .. fmt2(pet.cheer),10,70)
+        love.graphics.print("Age: " .. pet.age, 10, 90)
     elseif pet and pet.dead then
         love.graphics.print('Your pet has died.\nPress "n" to hatch a new pet.',love.graphics.getWidth()/2,love.graphics.getHeight()/2)
     end
