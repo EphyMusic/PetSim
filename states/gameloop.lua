@@ -41,7 +41,11 @@ function GameLoop:buildWalls(r,g,b)
     table.insert(self.walls,Wall(0,0,10,love.graphics.getHeight(),r,g,b)) --left wall
     table.insert(self.walls,Wall(love.graphics.getWidth()-10,0,10,love.graphics.getHeight(),r,g,b)) --right wall
     table.insert(self.walls,Wall(0,0,love.graphics.getWidth(),10,r,g,b)) --top wall
-    table.insert(self.walls,Wall(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2,r,g,b)) --bottom wall
+    if not bHandheld then
+        table.insert(self.walls,Wall(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2,r,g,b)) --bottom wall
+    else
+        table.insert(self.walls,Wall(0,love.graphics.getHeight(),love.graphics.getWidth(),10)) --bottom wall
+    end
 end
 
 -- Remove a pet from the active pets list

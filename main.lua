@@ -4,10 +4,20 @@
 -- Pet = require 'modules.pet'
 GS = require 'libs.hump.gamestate'
 GameLoop = require 'states.gameloop'
-bDebug = true  -- Enable debug mode (J/K keys and debug display)
+
+bDebug = true
 bHandheld = false
+if #arg > 0 then
+    if table.find(arg,"-debug") then
+        bDebug = true  -- Enable debug mode (J/K keys and debug display)
+    end
+    if table.find(arg,"-handheld") then
+        bHandheld = true
+    end
+end
 
 function love.load()
+
     GS.registerEvents()
     GS.switch(GameLoop)
 end

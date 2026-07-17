@@ -15,7 +15,7 @@ end
 
 -- Initialize pet with default stats
 function Pet:new()
-    self.names = {"Bob","George","Penny","Amy","Darla","Conroy","Little Biddy","Unnamed"}
+    self.names = {"Bob","George","Penny","Amy","Darla","Conroy","Little Biddy","Lord Pettingus"}
     self.name = self.names[love.math.random(#self.names)]
     self.dead = false
     self.hp = 100
