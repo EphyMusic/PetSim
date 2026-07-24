@@ -17,7 +17,6 @@ if #arg > 0 then
 end
 
 function love.load()
-
     GS.registerEvents()
     GS.switch(GameLoop)
 end

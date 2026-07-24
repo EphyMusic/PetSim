@@ -77,9 +77,21 @@ function GameLoop:buildUI()
         self:feedPet(1)
     end)
     )
-    table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10, 60,30,"Pet",
+    table.insert(self.ui,Button(120,love.graphics.getHeight()/2 + 10,60,30,"Pet",
     function()
         self:petPet(10)
+    end)
+    )
+    table.insert(self.ui,Button(190,love.graphics.getHeight()/2 + 10,60,30,"Previous",
+    funciton()
+        self.currentPet += -1
+        if self.currentPet <= 0 then self.currentPet = #self.pets end
+    end)
+    )
+    table.insert(self.ui,Button(260,love.graphics.getHeight()/2 + 10,60,30,"Next",
+    funciton()
+        self.currentPet += 1
+        if self.currentPet > #self.pets then self.currentPet = 1 end
     end)
     )
 end
