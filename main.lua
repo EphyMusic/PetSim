@@ -8,11 +8,9 @@ GameLoop = require 'states.gameloop'
 bDebug = true
 bHandheld = false
 if #arg > 0 then
-    if table.find(arg,"-debug") then
-        bDebug = true  -- Enable debug mode (J/K keys and debug display)
-    end
-    if table.find(arg,"-handheld") then
-        bHandheld = true
+    for i,v in ipairs(arg) do
+        if v == "-debug" then bDebug = true end
+        if v == "-handheld" then bHandheld = true end
     end
 end
 
